@@ -3,7 +3,12 @@ import ExcelJS from 'exceljs';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const url = 'https://www.indiegogo.com/projects/skatebolt-breeze-ii-start-of-your-eboarding-life/x/37902132#/';
+
+// 搜索关键词：
+// E-Board
+// electric skateboard
+const urlList = [
+];
 
 interface ProjectInfo {
     name: string | undefined;
@@ -58,7 +63,7 @@ const scrapeData = async (url: string): Promise<ProjectInfo> => {
         const isSuccess = '/'
 
         const targetAmount = getText('div.campaignHeaderBasics-goal span');
-        const actualAmount = getText('.basicsGoalProgress-amountSold'); // 使用了人民币，先手工填
+        const actualAmount = getText('.basicsGoalProgress-amountSold.t-rebrand-h4s');
         // const actualAmount = '';
         const actualAmountUSD = actualAmount; // Assuming the amounts are already in USD
 
@@ -87,7 +92,7 @@ const scrapeData = async (url: string): Promise<ProjectInfo> => {
     return projectInfo;
 };
 
-const createExcel = async (projectInfo: ProjectInfo) => {
+const createExcel = async (projectInfos: ProjectInfo[]) => {
     const filePath = path.join(__dirname, 'IndiegogoProjectInfo.xlsx');
 
     // 如果文件存在，先删除文件
@@ -114,7 +119,11 @@ const createExcel = async (projectInfo: ProjectInfo) => {
         { header: '实际众筹人数', key: 'backers', width: 15 },
     ];
 
-    worksheet.addRow(projectInfo);
+    projectInfos.forEach((projectInfo) => {
+        worksheet.addRow(projectInfo);
+    });
+
+    await workbook.xlsx.writeFile(filePath);
 
     await workbook.xlsx.writeFile('IndiegogoProjectInfo.xlsx');
     console.log('Excel file created: IndiegogoProjectInfo.xlsx');
@@ -122,8 +131,12 @@ const createExcel = async (projectInfo: ProjectInfo) => {
 
 const main = async () => {
     try {
-        const projectInfo = await scrapeData(url);
-        await createExcel(projectInfo);
+        const projectInfos: ProjectInfo[] = [];
+        for (const url of urlList) {
+            const projectInfo = await scrapeData(url);
+            projectInfos.push(projectInfo);
+        }
+        await createExcel(projectInfos);
     } catch (error) {
         console.error('Error:', error);
     }
