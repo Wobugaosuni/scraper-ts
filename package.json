@@ -1,0 +1,25 @@
+{
+  "name": "amazon-reviews-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/translate": "^8.3.0",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "exceljs": "^4.4.0",
+    "google-translate-api": "^2.3.0",
+    "puppeteer": "^22.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
