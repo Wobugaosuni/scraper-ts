@@ -8,6 +8,7 @@ import * as path from 'path';
 // E-Board
 // electric skateboard
 const urlList = [
+    ''
 ];
 
 interface ProjectInfo {
